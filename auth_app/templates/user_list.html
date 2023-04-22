@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Список пользователей
+{% endblock %}
+
+
+{% block content %}
+    <form method="POST" action="{% url 'filter_users'%}">
+    {% csrf_token %}
+        <div class="inputbox">
+            <ion-icon name="search-outline"></ion-icon>
+            <input type="text" name="filter" title="Введите часть никнейма" required>
+            <label for="filter">Фильтр</label>
+        </div>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Логин</th>
+                <th>Админ?</th>
+                <th>Модератор?</th>
+                <th>E-Mail</th>
+                <th>Дата регистрации</th>
+                <th>Последняя активность</th>
+                <th>Войти как</th>
+                <th>Удалить</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            {% if user.is_active %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.is_superuser }}</td>
+                <td>{{ user.is_staff }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.date_joined|date:'d b Y (D) в H:i по e' }}</td>
+                <td>{{ user.last_login|date:'d b Y (D) в H:i по e' }}</td>
+                <td>
+                    <form method="POST" action="{% url 'quick_login' %}">
+                        {% csrf_token %}
+                        <button type="submit" value="{{ user.id }}" name="user_id">
+                            Войти как {{ user.username }}
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST" action="{% url 'ask' %}">
+                        {% csrf_token %}
+                        <button type="submit" value="{{ user.id }}" name="delete_id">
+                            Удалить
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

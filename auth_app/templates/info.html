@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Инфо
+{% endblock %}
+
+{% block content %}
+    <div class="form-box">
+    {% if errors %}
+        <p>{{ errors }}</p>
+        <a href="{% url 'register' %}">
+            <button type="button">Регистрация</button>
+        </a>
+    {% elif message %}
+        <p>{{ message }}</p>
+    {% endif %}
+    {% if not user.is_authenticated %}
+        <a href="{% url 'login' %}">
+            <button type="button">Войти</button>
+        </a>
+    {% endif %}
+    {% if delete_id %}
+        <form method="POST" action="{% url 'delete' %}">
+            {% csrf_token %}
+                <button type="submit" value="{{ delete_id }}" name="delete_id">
+                    Да
+                </button>
+            <a href="{% url 'user_list' %}">
+                <button type="button">
+                    Нет
+                </button>
+            </a>
+        </form>
+    </div>
+    {% endif %}
+{% endblock %}
