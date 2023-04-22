@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Регистрация
+{% endblock %}
+
+{% block content %}
+    <div class="form-box">
+        <div class="form-value">
+            <form method="POST">
+                {% csrf_token %}
+                <h2>Регистрация</h2>
+                <div class="inputbox">
+                    <ion-icon name="person-outline"></ion-icon>
+                    <input type="text" name="username" autocomplete="off" required>
+                    <label for="username">Логин</label>
+                </div>
+                <div class="inputbox">
+                    <ion-icon name="lock-closed-outline"></ion-icon>
+                    <input type="password" name="password" autocomplete="new-password" required>
+                    <label for="password">Пароль</label>
+                </div>
+                <div class="inputbox">
+                    <ion-icon name="refresh-circle-outline"></ion-icon>
+                    <input type="password" name="password_conf" required>
+                    <label for="password_conf">Подтверждение пароля</label>
+                </div>
+                <div class="inputbox">
+                    <ion-icon name="mail-outline"></ion-icon>
+                    <input type="email" name="email" required>
+                    <label for="email">E-Mail</label>
+                </div>
+                <div class="inputbox">
+                    <ion-icon name="person-circle-outline"></ion-icon>
+                    <input type="text" name="name" required>
+                    <label for="name">Ваше имя</label>
+                </div>
+                <div class="inputbox">
+                    <ion-icon name="call-outline"></ion-icon>
+                    <input type="tel" name="phone" required>
+                    <label for="phone">Телефон</label>
+                </div>
+                <div class="buttons">
+                    <button type="submit" value="Регистрация">
+                        Зарегистрировать
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="errors">
+        {% if errors %}
+            {% for message in errors %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
