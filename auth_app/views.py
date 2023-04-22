@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.core.handlers.wsgi import WSGIRequest
 from django.contrib import auth
 from django.contrib.auth.models import User
-from auth_app.service.validator.validators import RegisterValidator
+from auth_app.service.validator.Validator import RegisterValidator
+from auth_app.service.validator.exceptions.ValidateExceprion import ValidateException
 
 
 def login(request: WSGIRequest):
@@ -22,22 +23,28 @@ def login(request: WSGIRequest):
 
 def register(request: WSGIRequest):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        password_confirm = request.POST.get('password_conf')
-        email = request.POST.get('email')
-        name = request.POST.get('name')
-        phone_number = request.POST.get('phone')
-        user_params = (username, password, password_confirm, email, name, phone_number)
-        new_user = RegisterValidator(*user_params)
-        errors = new_user.validate_register()
-        if errors:
-            return render(request, 'register.html', {
-                'errors': errors
+        # Область подключенных сервисов
+        request_data = request.POST.dict()
+        try:
+            RegisterValidator(request_data).validate()
+        except ValidateException as exception:
+            return render(request, 'error_page.html', {
+                'errors': exception.error_list
             })
-        errors = new_user.save_user()
+
+        # Область определения
+        username = request_data['username']
+        password = request_data['password']
+        password_confirm = request_data['password_conf']
+        email = request_data['email']
+        name = request_data['name']
+        phone_number = request_data['phone']
+
+        # Область логики
+        # TODO Создать пользователя
+
+        # Область результата
         return render(request, 'info.html', {
-            'errors': errors,
             'message': f'Пользователь {username} успешно зарегистрирован в системе!'
         })
     return render(request, 'register.html')
