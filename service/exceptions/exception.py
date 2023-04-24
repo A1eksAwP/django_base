@@ -1,0 +1,3 @@
+class ValidateException(BaseException):
+    def __init__(self):
+        ...

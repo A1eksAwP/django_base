@@ -193,3 +193,7 @@ tr:hover {
 p {
     color: #FFFFFF;
 }
+.errors{
+    display: flex;
+    flex-direction: column;
+}

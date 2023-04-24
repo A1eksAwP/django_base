@@ -1,18 +1,22 @@
 import re
 from django.contrib.auth.models import User
-from auth_app.service.validator.ERROR_MESSAGE import USER_ALREADY_EXIST, EMAIL_ALREADY_EXIST, \
-    NOT_EQUAL_PASSWORDS, BAD_USERNAME, BAD_PASSWORD, BAD_EMAIL, BAD_NAME, BAD_PHONE
+from service.validator.validator import Validator
+from auth_app.service.validator import ERROR_MESSAGE
+from auth_app.service.validator.exceptions.expection import ValidateException
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
+class RegisterValidator(Validator):
 
-class RegisterValidator:
-
-    def __init__(self, username: str, password: str, password_confirm: str, email: str, name: str, phone_number: str):
-        self.username = username
-        self.name = name
-        self.email = email
-        self.phone = phone_number
-        self.password = password
-        self.password_confirm = password_confirm
+    def __init__(self, request_data: dict):
+        self.request_data = request_data
+        self.username = self.request_data.get('username')
+        self.name = self.request_data.get('name')
+        self.email = self.request_data.get('email')
+        self.phone = self.request_data.get('phone')
+        self.password = self.request_data.get('password')
+        self.password_confirm = self.request_data.get('password_conf')
+        self.errors = []
 
     def validate_username(self) -> object | None:
         return re.fullmatch(r'\w+', self.username)
@@ -20,45 +24,39 @@ class RegisterValidator:
     def validate_name(self) -> object | None:
         return re.fullmatch(r'[^\s^\d]+', self.name)
 
-    def validate_email(self) -> object | None:
-        return re.fullmatch(r'((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])', self.email)
+    def is_valid_email(self) -> bool:
+        try:
+            validate_email(self.email)
+        except ValidationError:
+            return False
+        return True
 
     def validate_phone(self) -> object | None:
-        return re.fullmatch(r'\d+', self.phone)
+        return re.fullmatch(r'\d{1,12}', self.phone)
 
     def validate_password(self) -> object | None:
         return re.fullmatch(r'\S+', self.password)
 
-    def validate_register(self) -> list[str]:
-        errors = []
+    def validate(self):
+        super().validate()
         if User.objects.filter(username=self.username).exists():
-            errors.append(USER_ALREADY_EXIST)
+            self.errors.append(ERROR_MESSAGE.USER_ALREADY_EXIST)
         if User.objects.filter(email=self.email).exists():
-            errors.append(EMAIL_ALREADY_EXIST)
+            self.errors.append(ERROR_MESSAGE.EMAIL_ALREADY_EXIST)
         if self.password != self.password_confirm:
-            errors.append(NOT_EQUAL_PASSWORDS)
+            self.errors.append(ERROR_MESSAGE.NOT_EQUAL_PASSWORDS)
         if not self.validate_username() or len(self.username) < 6:
-            errors.append(BAD_USERNAME)
+            self.errors.append(ERROR_MESSAGE.BAD_USERNAME)
         if not self.validate_password():
-            errors.append(BAD_PASSWORD)
-        if not self.validate_email():
-            errors.append(BAD_EMAIL)
+            self.errors.append(ERROR_MESSAGE.BAD_PASSWORD)
+        if not self.is_valid_email():
+            self.errors.append(ERROR_MESSAGE.BAD_EMAIL)
         if not self.validate_name():
-            errors.append(BAD_NAME)
+            self.errors.append(ERROR_MESSAGE.BAD_NAME)
         if not self.validate_phone():
-            errors.append(BAD_PHONE)
-        return errors
+            self.errors.append(ERROR_MESSAGE.BAD_PHONE)
+        if self.errors:
+            self.__throw()
 
-    def save_user(self) -> list[str]:
-        errors = []
-        new_user = User()
-        new_user.username = self.username
-        new_user.set_password(self.password)
-        new_user.email = self.email
-        new_user.name = self.name
-        new_user.phone = self.phone
-        try:
-            new_user.save()
-        except Exception as e:
-            errors.append(f'Создать пользователя {self.username} не удалось. Ошибка сервера: {e}')
-        return errors
+    def __throw(self):
+        raise ValidateException(self.errors)

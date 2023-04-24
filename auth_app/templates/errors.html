@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Инфо
+{% endblock %}
+
+{% block content %}
+    <div class="form-box">
+    {% if errors %}
+        <div class="errors">
+        {% for error in errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+        <div class="buttons">
+        <a href="{% url 'register' %}">
+            <button type="button">Вернуться к регистрации</button>
+        </a>
+        </div>
+        </div>
+
+    {% endif %}
+    </div>
+{% endblock %}
