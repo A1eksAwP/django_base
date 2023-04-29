@@ -1,5 +1,7 @@
 from pathlib import Path
 import credentials
+import os
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'auth_app',
     'todo_app',
+    'transcribe_app',
 ]
 
 MIDDLEWARE = [
@@ -30,6 +33,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'auth_app.middleware.auth_middleware',
 ]
 
 ROOT_URLCONF = 'todo.urls'
@@ -52,7 +56,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'todo.wsgi.application'
 
-
+#  Потом сделаю через env, пускай пока так
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
