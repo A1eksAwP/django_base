@@ -6,16 +6,17 @@ from auth_app.service.validator.exceptions.expection import ValidateException
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
+
 class RegisterValidator(Validator):
 
     def __init__(self, request_data: dict):
         self.request_data = request_data
-        self.username = self.request_data.get('username')
-        self.name = self.request_data.get('name')
-        self.email = self.request_data.get('email')
-        self.phone = self.request_data.get('phone')
-        self.password = self.request_data.get('password')
-        self.password_confirm = self.request_data.get('password_conf')
+        self.username = self.request_data['username']
+        self.name = self.request_data['name']
+        self.email = self.request_data['email']
+        self.phone = self.request_data['phone']
+        self.password = self.request_data['password']
+        self.password_confirm = self.request_data['password_conf']
         self.errors = []
 
     def validate_username(self) -> object | None:

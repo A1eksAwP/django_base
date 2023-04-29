@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'auth_app',
     'todo_app',
+    'transcribe_app',
 ]
 
 MIDDLEWARE = [

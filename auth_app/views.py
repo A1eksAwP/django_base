@@ -24,19 +24,19 @@ def login(request: WSGIRequest):
 
 def register(request: WSGIRequest):
     if request.method == 'POST':
-        request_data = request.POST
+        request_data = request.POST.dict()
         try:
             RegisterValidator(request_data).validate()
         except ValidateException as exception:
             return render(request, 'errors.html', {'errors': exception.errors_list})
-        username = request_data.get('username')
-        password = request_data.get('password')
+        username = request_data['username']
+        password = request_data['password']
         new_user = User()
         new_user.username = username
         new_user.set_password(password)
-        new_user.email = request_data.get('email')
-        new_user.name = request_data.get('name')
-        new_user.phone = request_data.get('phone')
+        new_user.email = request_data['email']
+        new_user.name = request_data['name']
+        new_user.phone = request_data['phone']
         try:
             new_user.save()
         except Exception as e:
