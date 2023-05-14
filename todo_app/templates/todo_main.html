@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ user.username }} ToDo</title>
+    {% block link %}
+         <link rel="stylesheet" type="text/css" href="{% static 'auth_app/new_style.css' %}">
+    {% endblock %}
+</head>
+<body>
+{% include "includes/navigate_menu.html" %}
+
+
+<section class="todoapp">
+{% block content %}
+    <div class="form-box column">
+    <form method="POST" action="">
+    {% csrf_token %}
+        <div class="box">
+            <div class="long inputbox">
+                <ion-icon name="briefcase-outline"></ion-icon>
+                <input type="text" name="title" title="Введите название задачи" required>
+                <input type="hidden" name="form_type" value="create">
+                <label for="title">Поставить новую задачу:</label>
+            </div>
+            <div class="select">
+                <p>для:</p>
+                <select name="to_user">
+                    {% for active_user in users %}
+                        {% if active_user.is_active %}
+                            {% if active_user.id == user.id %}
+                            <option selected>{{ active_user }}</option>
+                            {% else %}
+                            <option >{{ active_user }}</option>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </form>
+
+    {% if tasks_list.count > 0 %}
+    <h2>Список
+        {% if filter_status == 'completed' %}выполненных
+        {% elif filter_status == 'active' %}активных
+        {% else %}всех{% endif %}
+        {{ tasks_list.count }} задач для {{ user.username }}</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>От</th>
+                <th>Для</th>
+                <th>Создана</th>
+                <th>Задача</th>
+                <th>Статус</th>
+                <th>Дата выполнения</th>
+                <th>Завершить</th>
+                <th>Удалить</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks_list %}
+            <tr>
+                <td>{{ task.by_user }}</td>
+                <td>{{ task.todo_list.user.username }}</td>
+                <td>{{ task.create_at }}</td>
+                <td>{{ task.title }}</td>
+                <td>
+                        {% if task.status_id == 1 %}
+                            Выполнена
+                        {% elif task.status_id == 2 %}
+                            Не выполнена
+                        {% elif task.status_id == 3 %}
+                            Просрочена
+                        {% elif task.status_id == 4 %}
+                            Отменена
+                        {% endif %}
+                </td>
+                <td>{{ task.complete_at }}</td>
+                <td>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="complete">
+                        <input type="hidden" name="task_id" value="{{ task.id }}">
+                        {% if task.status_id != 1 %}
+                        <button class="complete">Выполнить</button>
+                        {% else %}
+                        <button class="complete">Повторить</button>
+                        {% endif %}
+                    </form>
+                </td>
+                <td>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="destroy">
+                        <input type="hidden" name="task_id" value="{{ task.id }}">
+                        <button class="destroy">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="undertable">
+        <a href="?status=all">Все</a>
+        <a href="?status=active">Активные</a>
+        <a href="?status=completed">Завершенные</a>
+    </div>
+    <div class="clear">
+        <form action="" method="post">
+            {% csrf_token %}
+            <button>Удалить все завершенные<input type="hidden" name="form_type" value="clear"></button>
+        </form>
+    </div>
+    {% else %}
+        <h2>
+            У пользователя {{ user.username }} нет
+            {% if filter_status == 'completed' %}выполненных{% endif %}
+            {% if filter_status == 'active' %}активных{% endif %}
+            задач
+        </h2>
+        {% if filter_status %}
+        <a href="{% url 'todo'%}">сбросить фильтр</a>
+        {% endif %}
+    {% endif %}
+    </div>
+{% endblock %}
+</section>
+{% block script %}
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+{% endblock %}

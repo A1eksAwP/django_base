@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="form-box column">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="inputbox long">
+            <ion-icon name="search-outline"></ion-icon>
+            <input type="text" id="text" name="text" required minlength="1" size="50">
+            <label for="text">Текст для изменения:</label>
+        </div>
+        <select name="case">
+            <option>from_url</option>
+            <option>sentence</option>
+            <option>upper</option>
+            <option>lower</option>
+            <option>each_word</option>
+            <option>toggle</option>
+            <option>kebab</option>
+            <option>snake</option>
+            <option>camel</option>
+            <option>random</option>
+            <option>rot13</option>
+            <option>cipher</option>
+        </select>
+            <button>Изменить текст</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Стиль текста</th>
+                <th>Преобразованный текст</th>
+                <th>Оригинальный текст</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ case }}</td>
+                <td>{{ text }}</td>
+                <td>{{ base_text }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

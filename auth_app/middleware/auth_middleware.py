@@ -12,5 +12,5 @@ class AuthMiddleware:
         if not request.user.is_authenticated and request.path not in unlogin_views:
             path = request.build_absolute_uri()
             login_url = reverse('login')
-            return redirect(f'{login_url}?next{path}')
+            return redirect(f'{login_url}?next_page={path}')
         return self.get_response(request)

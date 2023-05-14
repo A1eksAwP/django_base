@@ -8,6 +8,10 @@ class TodoList(models.Model):
 
 
 class TodoStatus(models.Model):
+    COMPLETED = 1
+    NOT_COMPLETED = 2
+    OVERDUE = 3
+    CANCELED = 4
     name = models.TextField()
 
 
@@ -18,3 +22,4 @@ class TodoTask(models.Model):
     status = models.ForeignKey(TodoStatus, models.CASCADE)
     title = models.TextField()
     text = models.TextField()
+    by_user = models.TextField(null=True)
