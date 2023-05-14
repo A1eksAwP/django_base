@@ -11,6 +11,7 @@ def login(request: WSGIRequest):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        next_page = request.GET.get('next_page')
         user: User = auth.authenticate(request, username=username, password=password)
         if user is None:
             return render(request, 'login.html', {
@@ -18,7 +19,10 @@ def login(request: WSGIRequest):
             })
         if user.is_active:
             auth.login(request, user)
-            return redirect('main')
+            return redirect('home_page')
+        if next_page is not None:
+            return redirect(next_page)
+
     return render(request, 'login.html')
 
 
@@ -29,6 +33,8 @@ def register(request: WSGIRequest):
             RegisterValidator(request_data).validate()
         except ValidateException as exception:
             return render(request, 'errors.html', {'errors': exception.errors_list})
+        except BaseException:
+            return render(request, 'errors.html', {'errors': ERROR_MESSAGE.UNKNOWN_ERROR})
         username = request_data['username']
         password = request_data['password']
         new_user = User()
@@ -85,7 +91,7 @@ def quick_login(request: WSGIRequest):
     user_id = request.POST.get('user_id')
     user = User.objects.get(pk=user_id)
     auth.login(request, user)
-    return redirect('main')
+    return redirect('home_page')
 
 
 def ask(request: WSGIRequest):

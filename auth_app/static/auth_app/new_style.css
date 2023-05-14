@@ -50,7 +50,18 @@ section {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 25px;
+}
+
+.nav-box{
     padding: 2px 20px 2px 20px;
+    flex-direction: row;
+}
+
+h1 {
+    font-size: 4em;
+    color: #fff;
+    text-align: center;
 }
 
 h2 {
@@ -169,12 +180,16 @@ table {
     border-collapse: separate;
     max-width: 100%;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    /*table-layout: fixed;*/
+    /*width:100%*/
 }
 
 th,
 td {
+    max-width: 400px;
     padding: 12px;
     text-align: center;
+    word-wrap:break-word;
 }
 
 tr:nth-child(even) {
@@ -193,7 +208,42 @@ tr:hover {
 p {
     color: #FFFFFF;
 }
+
 .errors{
     display: flex;
     flex-direction: column;
+}
+
+a {
+    color: #F5F5F5;
+    text-decoration: none;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+.long{
+    width: 600px;
+}
+
+.column{
+    flex-direction: column;
+}
+
+.undertable{
+    display: flex;
+    align-self: flex-end;
+}
+
+.clear{
+    align-self: center;
+}
+
+.box{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.select{
+    display: flex;
 }

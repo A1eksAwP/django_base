@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'auth_app',
     'todo_app',
     'transcribe_app',
+    'homework_app',
 ]
 
 MIDDLEWARE = [
@@ -33,7 +34,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'auth_app.middleware.auth_middleware',
+    'auth_app.middleware.auth_middleware.AuthMiddleware',
 ]
 
 ROOT_URLCONF = 'todo.urls'
