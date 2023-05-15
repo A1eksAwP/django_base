@@ -9,6 +9,7 @@
     {% if user.is_authenticated %}
         <a href="{% url 'transcribe' %}">Котики</a>
         <a href="{% url 'todo' %}">ToDo</a>
+        <a href="{% url 'snake' %}">Змейка</a>
         <a href="{% url 'logout' %}">Выйти</a>
         <a>{{ user.username }}</a>
     {% else %}

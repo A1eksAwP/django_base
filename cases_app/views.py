@@ -1,6 +1,6 @@
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render
-from homework_app.utils import SwitchCase
+from cases_app.utils import SwitchCase
 
 
 def change_case(request: WSGIRequest):

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block title %}The Snake Game{% endblock %}
+
+    {% block link %}
+        <link rel="stylesheet" type="text/css" href="{% static 'auth_app/new_style.css' %}">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{% static 'snake_app/snake.css' %}">
+        <script type="text/javascript" src="{% static 'snake_app/snake.js' %}"></script>
+    {% endblock %}
+
+{% block content %}
+    <div class="form-box">
+        <div id="game" class="game">
+            <div id="score" class="score">
+                <span id="status-value" class="status">Игра "Змейка"</span>
+                <span id="score-value" class="value"></span>
+            </div>
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="buttons"><button disabled id="send_score"><p>Отправить результат</p></button></div>
+                <input type="hidden" id="post_score" name="score" value="">
+                <input type="hidden" id="post_difficulty" name="difficulty" value="">
+            </form>
+            <a href="{% url 'leaderboards'%}">Таблица лидеров</a>
+            <div class="displayboard"><div id="board" class="board"></div></div>
+            <div id="buttons" class="buttons-menu buttons">
+                <button disabled id="button-restart" class="restart" type="button">Запустить!</button>
+                <button disabled id="button-pause" class="pause" type="button">Пауза</button>
+                <button disabled id="button-stop" class="stop" type="button">Сдаться</button>
+            </div>
+            <div id="settings">
+                <p>Выбери уровень сложности:</p>
+                <div class="buttons-diff buttons">
+                    <button id="button-set-diff-easy" class="easy" type="button"><p>Легкий</p></button>
+                    <button id="button-set-diff-medium" class="medium" type="button"><p>Средний</p></button>
+                    <button id="button-set-diff-hard" class="hard" type="button"><p>Тяжёлый</p></button>
+                    <button id="button-set-diff-hardcore" class="hardcore" type="button"><p>Hardcore!</p></button>
+                </div>
+            </div>
+            <p id="hint" class="hint">(Для выбора другого уровня сложности нажми паузу)</p>
+
+        </div>
+    </div>
+{% endblock %}

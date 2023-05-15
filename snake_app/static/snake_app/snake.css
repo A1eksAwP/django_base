@@ -1,0 +1,264 @@
+body {
+    font-family: monospace, sans-serif;
+}
+
+.game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.score {
+    font-size: 50px;
+    color: rgb(255 255 255);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: gamescorepulse 5s infinite ease-in-out;
+}
+
+.game.started .score {
+    color: rgb(82, 205, 50);
+}
+
+.game.paused .score {
+    color: rgb(233, 158, 6);
+}
+
+.game.stopped .score {
+    color: rgb(255 255 255);
+}
+
+.board {
+    display: grid;
+    grid-template-rows: repeat(16, 1fr);
+    grid-template-columns: repeat(16, 1fr);
+    height: 50vw;
+    width: 50vw;
+    border: rgb(163 163 163) 3px solid;
+    background: rgba(91, 91, 91, 0.38);
+    box-sizing: border-box;
+    padding: 20px;
+    max-width: 60vh;
+    max-height: 60vh;
+}
+
+.board .cell {
+    border: rgba(221, 211, 185, 0.6) 0.5px solid;
+    box-shadow: 0 0 4px 6px rgb(0 0 0 / 8%);
+}
+
+.board .cell.snake {
+    background-color: rgb(7 145 192);
+    animation: snakepulse 4s infinite ease-in-out;
+}
+
+.board .cell.food {
+    background-color: rgb(206, 65, 187);
+    animation: fruitpulse 1.5s infinite ease-in-out;
+    margin: 5px;
+    border-radius: 2px;
+}
+
+.game.started .board .cell {
+    border-color: rgb(187 187 187);
+}
+
+.game.paused .board .cell {
+    border-color: rgb(233, 158, 6);
+}
+
+.game.stopped .board .cell {
+    border-color: rgb(236 48 48);
+}
+
+.game.started .board {
+    border: rgb(82, 205, 50) 5px solid;
+}
+
+.game.paused .board {
+    border: rgb(233, 158, 6) 5px solid;
+}
+
+.game.stopped .board {
+    border: rgb(181 16 16) 5px solid;
+}
+
+
+.buttons button {
+    background-color: transparent;
+    margin: 10px;
+    line-height: 31px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 0 15px;
+    border: rgb(200, 200, 200) 1px solid;
+}
+
+.buttons button.restart {
+    border-color: rgb(82, 205, 50);
+    color: rgb(82, 205, 50);
+}
+
+.buttons button.restart:hover {
+    border-color: rgba(82, 205, 50, 0.5);
+    color: rgba(82, 205, 50, 0.5);
+}
+
+.buttons button.restart:active {
+    border-color: rgba(25, 88, 28, 0.8);
+    color: rgba(25, 88, 28, 0.8);
+}
+
+.buttons button.pause {
+    border-color: rgb(233, 158, 6);
+    color: rgb(233, 158, 6);
+}
+
+.buttons button.pause:hover {
+    border-color: rgba(233, 158, 6, 0.5);
+    color: rgba(233, 158, 6, 0.5);
+}
+
+.buttons button.pause:active {
+    border-color: rgba(250, 81, 29, 0.8);
+    color: rgba(250, 81, 29, 0.8);
+}
+
+.buttons button.stop {
+    border-color: rgb(233, 6, 6);
+    color: rgb(233, 6, 6);
+}
+
+.buttons button.stop:hover {
+    border-color: rgba(233, 6, 6, 0.5);
+    color: rgba(233, 6, 6, 0.5);
+}
+
+.buttons button.stop:active {
+    border-color: rgba(90, 21, 0, 0.8);
+    color: rgba(90, 21, 0, 0.8);
+}
+
+#send_score:hover{
+    border-color: rgba(169, 6, 233, 0.5);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+@keyframes fruitpulse {
+    25% {
+        transform: scale(0.8) rotate(-180deg);
+    }
+    50% {
+        transform: scale(0.8) rotate(-7deg);
+        opacity: 0.8;
+    }
+    75% {
+        transform: scale(0.9) rotate(7deg);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes snakepulse {
+    50% {
+        transform: scale(0.5) rotate(45deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+.cell.snake.head {
+    background-color: rgb(36, 33, 206);
+    transform: scale(1.2);
+}
+
+.cell.snake.snakebreak {
+    background-color: #e79c1ef7;
+    transform: scale(1.6) rotate(45deg);
+    animation: snakepulse 0.5s infinite ease-in-out;
+}
+
+.game .board.pulse {
+    animation: boardpulse 0.25s ease-in-out;
+}
+
+.game.paused .board {
+    animation: boardpause 4s infinite ease-in-out;
+}
+
+.hint {
+    margin-top: 2px;
+    opacity: 0.6;
+}
+
+button:disabled {
+    opacity: 0.4;
+}
+
+@keyframes boardpulse {
+    20% {
+        transform: scale(0.95);
+        border: rgb(248, 32, 165) 5px solid;
+        opacity: 0.9
+    }
+    60% {
+        transform: scale(1.1);
+        border: rgb(73, 43, 241) 5px solid;
+        opacity: 1
+    }
+}
+
+@keyframes gamescorepulse {
+    50% {
+        transform: scale(0.95)
+    }
+    75% {
+        transform: scale(1.05)
+    }
+}
+
+@keyframes boardpause {
+    25% {
+        transform: scale(0.92) rotate(2deg);
+    }
+    50% {
+        transform: scale(1) rotate(0deg);
+    }
+    75% {
+        transform: scale(0.92) rotate(-2deg);
+    }
+}
+
+.displayboard {
+
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    display: flex;
+    min-width: 540px;
+    padding: 0 30px;
+    flex-direction: column;
+
+    height: 95vh;
+
+    justify-content: center;
+}
+
+#send_score{
+    display: none;
+}
+
+#settings p{
+    display: flex;
+    justify-content: center;
+}
