@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Топ 10 результатов в игре "Змейка"</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Место</th>
+                <th>Результат</th>
+                <th>Игрок</th>
+                <th>Сложность</th>
+                <th>Дата рекорда</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for player in players %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ player.score }}</td>
+                <td>{{ player.user.username }}</td>
+                <td>{{ player.difficulty.level }}</td>
+                <td>{{ player.create_at }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'snake' %}"><button>Вернуться к игре</button></a>
+{% endblock %}

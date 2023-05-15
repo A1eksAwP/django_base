@@ -23,7 +23,8 @@ INSTALLED_APPS = [
     'auth_app',
     'todo_app',
     'transcribe_app',
-    'homework_app',
+    'cases_app',
+    'snake_app',
 ]
 
 MIDDLEWARE = [
@@ -42,7 +43,13 @@ ROOT_URLCONF = 'todo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['auth_app/templates', 'todo_app/templates'],
+        'DIRS': [
+            'auth_app/templates',
+            'todo_app/templates',
+            'cases_app/templates',
+            'snake_app/templates',
+            'homepage_app/templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -97,7 +104,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = 'dist/'
 STATICFILES_DIRS = [
     'auth_app/static/',
-    'todo_app/static/',
+    'snake_app/static/',
 ]
 
 

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Home Page
+{% endblock %}
+
+{% block content %}
+    <h1>HOME PAGE</h1>
+    <div class="form-box column">
+    <h2>Список всех доступных приложений:</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Переход на страницу</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app, app_list in apps_dict.items %}
+            <tr>
+                <td>{{ app_list.0 }}</td>
+                <td>{{ app_list.1 }}</td>
+                <td><a href="{{ app }}"><button>Перейти</button></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+
+{% endblock %}

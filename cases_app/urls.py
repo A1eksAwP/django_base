@@ -1,5 +1,5 @@
 from django.urls import path, include
-import homework_app.views as homework
+import cases_app.views as homework
 
 url_case = [
     path('', homework.change_case, name='change_case'),

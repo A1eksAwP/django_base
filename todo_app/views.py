@@ -58,7 +58,7 @@ def __create_new_task(request):
     to_user = User.objects.filter(username=request.POST.get('to_user')).first()
     todo_list = TodoList.objects.filter(user=to_user).first()
     if todo_list is None:
-        todo_list = TodoList(user=request.user, date=datetime.now())
+        todo_list = TodoList(user=to_user, date=datetime.now())
         todo_list.save()
     todo = TodoTask()
     todo.title = request.POST.get('title')
