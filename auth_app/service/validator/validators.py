@@ -60,4 +60,11 @@ class RegisterValidator(Validator):
             self.__throw()
 
     def __throw(self):
-        raise ValidateException(self.errors)
+        raise ValidateException(self.errors, {
+            "username": self.username,
+            "name": self.name,
+            "email": self.email,
+            "phone": self.phone,
+            "password": self.password,
+            "password_confirm": self.password_confirm,
+        })

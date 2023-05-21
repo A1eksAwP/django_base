@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load socialaccount %}
 
 {% block title %}
     Авторизация
 {% endblock %}
 
 {% block content %}
+    <script src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
     <div class="form-box">
         <div class="form-value">
             <form method="POST">
@@ -13,16 +15,39 @@
                 <h2>Авторизация</h2>
                 <div class="inputbox">
                     <ion-icon name="person-outline"></ion-icon>
-                    <input type="text" name="username" autocomplete="off" required>
+                    <input type="text" name="username" autocomplete="off" value="{{ login_values.username }}" required>
                     <label for="username">Логин</label>
                 </div>
                 <div class="inputbox">
-                    <ion-icon name="lock-closed-outline"></ion-icon>
-                    <input type="password" name="password" autocomplete="new-password" required>
+                    <button style="display: none" tabindex="-1" id="hide_password" type="button" onclick="
+                        document.getElementById('password').setAttribute('type', 'password');
+                        document.getElementById('hide_password').style.display = 'none';
+                        document.getElementById('show_password').style.display = 'block'">
+                        <ion-icon id="icon_show" name="eye-off-outline"></ion-icon>
+                    </button>
+                    <button id="show_password" tabindex="-1" type="button" onclick="
+                        document.getElementById('password').setAttribute('type', 'text');
+                        document.getElementById('hide_password').style.display = 'block';
+                        document.getElementById('show_password').style.display = 'none'">
+                        <ion-icon id="icon_show" name="eye-outline"></ion-icon>
+                    </button>
+                    <input id="password" type="password" name="password" autocomplete="new-password" value="{{ login_values.password }}" required>
                     <label for="password">Пароль</label>
                 </div>
+
                 <div class="buttons">
                     <button type="submit" value="Войти">Войти</button>
+                </div>
+                <div class="social_login">
+                    <a href="{% provider_login_url "google" %}">
+                        <img class="icon" src="{% static 'auth_app/google.png' %}" alt="Google">
+                    </a>
+                    <a href="{% provider_login_url "yandex" %}">
+                        <img class="icon" src="{% static 'auth_app/yandex.svg' %}" alt="Yandex ID">
+                    </a>
+                    <a href="{% provider_login_url "github" %}">
+                        <img class="icon" src="{% static 'auth_app/github.png' %}" alt="GitHub">
+                    </a>
                 </div>
                 <div class="register">
                     <p>
@@ -38,6 +63,7 @@
             </form>
         </div>
     </div>
+
 {% endblock %}
 
 

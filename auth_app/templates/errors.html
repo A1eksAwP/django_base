@@ -8,16 +8,17 @@
     <div class="form-box">
     {% if errors %}
         <div class="errors">
-        {% for error in errors %}
-            <p>{{ error }}</p>
-        {% endfor %}
-        <div class="buttons">
-        <a href="{% url 'register' %}">
-            <button type="button">Вернуться к регистрации</button>
-        </a>
+            {% for error in errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+            <div class="buttons">
+                <form action="{% url 'register' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Вернуться к регистрации</button>
+                    <input type="hidden" name="error_params" value="{{ params }}">
+                </form>
+            </div>
         </div>
-        </div>
-
     {% endif %}
     </div>
 {% endblock %}
