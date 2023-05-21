@@ -15,9 +15,11 @@
         <p>{{ message }}</p>
     {% endif %}
     {% if not user.is_authenticated %}
-        <a href="{% url 'login' %}">
-            <button type="button">Войти</button>
-        </a>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <button type="submit">Войти</button>
+            <input type="hidden" name="login_values" value="{{ login_values }}">
+        </form>
     {% endif %}
     {% if delete_id %}
         <form method="POST" action="{% url 'delete' %}">

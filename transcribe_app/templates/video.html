@@ -26,10 +26,10 @@
                 <label for="words_filter">Фильтр слов:</label>
             </div>
         <div class="timecodes">
-        {% for timecode, tuple in transcriptions.items %}
+        {% for timecode, obj in transcriptions.items %}
             <div class="timecode-container">
                 <div class="timecode-button">
-                    <button type="button" onclick="playerJS.seekTo({{ tuple.1 }})"><strong>{{ timecode }}</strong><div lang="ru" class="timecode-phrase">{{ tuple.0 }}</div><strong>&nbsp</strong></button>
+                    <button type="button" onclick="playerJS.seekTo({{ obj.seconds }})"><strong>{{ timecode }}</strong><div lang="ru" class="timecode-phrase">{{ obj.phrase }}</div><strong>&nbsp</strong></button>
                 </div>
             <label class="switch">
                 <input type="checkbox">

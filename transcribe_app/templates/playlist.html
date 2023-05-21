@@ -16,9 +16,14 @@
         </form>
         <div class="now-player" id="player"></div>
         {% if errors %}
-            <div>
-                {% for error in errors %}
-                <p><strong>{{ error }}</strong></p>
+            <div id="errors">
+                {% for playlist_id, error_obj in errors.items %}
+                    <button class="very_long" onclick="
+                            setVideoTime('{{ error_obj.video_id }}', 0)">
+                        <strong>ОШИБКА</strong>
+                        .../watch?v={{ error_obj.video_id }} - {{ error_obj.description }}
+                        <strong>{{ playlist_id }}</strong>
+                    </button>
                 {% endfor %}
             </div>
         {% endif %}
@@ -27,17 +32,19 @@
         <div class="inputbox">
             <ion-icon name="search-outline"></ion-icon>
             <input type="text" name="words_filter" id="filter" title="Введите часть слова" required>
-            <label for="words_filter">Фильтр слов среди {{ video_count }} видео:</label>
+            <label for="words_filter">Фильтр слов среди {{ id_ok_count }} видео:</label>
         </div>
         <div class="timecodes">
             {% for transcription in videos.transcriptions %}
-                {% for timecode, tuple in transcription.items %}
+                {% for timecode, obj in transcription.items %}
                     <div class="timecode-container">
                         <div class="timecode-button">
-                        <button class="timecode-button" type="button" onclick="
-                                setVideoTime('{{ tuple.2 }}', {{ tuple.1 }})">
-                            <strong>{{ timecode }}</strong> {{ tuple.0 }} <strong>{{ tuple.3 }}</strong>
-                        </button>
+                            <button class="timecode-button" type="button" onclick="
+                                    setVideoTime('{{ obj.video_id }}', {{ obj.seconds }})">
+                                <strong>{{ timecode }}</strong>
+                                {{ obj.phrase }}
+                                <strong>{{ forloop.parentloop.counter }}</strong>
+                            </button>
                         </div>
                     <label class="switch">
                       <input type="checkbox">
@@ -53,7 +60,7 @@
 {% block script %}
     <script>
       const tag = document.createElement('script');
-      let nowId = '{{ videos.videos_id.0.0 }}'
+      let nowId = '{{ videos.videos_id.0 }}'
       let lastTxtId
       let txtId
 

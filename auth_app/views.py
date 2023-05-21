@@ -5,10 +5,14 @@ from django.contrib.auth.models import User
 from auth_app.service.validator.validators import RegisterValidator
 from auth_app.service.validator.exceptions.expection import ValidateException
 from auth_app.service.validator import ERROR_MESSAGE
+import json
 
 
 def login(request: WSGIRequest):
-    if request.method == 'POST':
+    login_values = request.POST.get('login_values')
+    if login_values:
+        login_values = json.loads(login_values.replace("'", "\""))
+    if request.method == 'POST' and not login_values:
         username = request.POST.get('username')
         password = request.POST.get('password')
         next_page = request.GET.get('next_page')
@@ -18,21 +22,26 @@ def login(request: WSGIRequest):
                 'error': 'Неверный логин или пароль',
             })
         if user.is_active:
-            auth.login(request, user)
+            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('home_page')
         if next_page is not None:
             return redirect(next_page)
-
-    return render(request, 'login.html')
+    return render(request, 'login.html', {'login_values': login_values})
 
 
 def register(request: WSGIRequest):
-    if request.method == 'POST':
+    register_params = request.POST.get('error_params')
+    if register_params:
+        register_params = json.loads(register_params.replace("'", "\""))
+    if request.method == 'POST' and not register_params:
         request_data = request.POST.dict()
         try:
             RegisterValidator(request_data).validate()
         except ValidateException as exception:
-            return render(request, 'errors.html', {'errors': exception.errors_list})
+            return render(request, 'errors.html', {
+                'errors': exception.errors_list,
+                'params': exception.params,
+            })
         except BaseException:
             return render(request, 'errors.html', {'errors': ERROR_MESSAGE.UNKNOWN_ERROR})
         username = request_data['username']
@@ -50,9 +59,12 @@ def register(request: WSGIRequest):
                 'errors': [f'{ERROR_MESSAGE.USER_CREATE_FAIL.format(username)}', f'Ошибка сервера: {e}']
             })
         return render(request, 'info.html', {
-            'message': f'Пользователь {username} успешно зарегистрирован в системе!'
+            'message': f'Пользователь {username} успешно зарегистрирован в системе!',
+            'login_values': {'username': username, 'password': password}
         })
-    return render(request, 'register.html')
+    return render(request, 'register.html', {
+        'register_params': register_params,
+    })
 
 
 def logout(request: WSGIRequest):
@@ -68,7 +80,7 @@ def user_list(request: WSGIRequest):
     if request.user.is_superuser:
         users = User.objects.all()
         return render(request, 'user_list.html', {
-            'users': users
+            'users': users.order_by('id')
         })
     return render(request, 'info.html', {
         'message': 'У вас недостаточно прав на просмотр этой страницы.'
@@ -90,7 +102,7 @@ def filter_users(request: WSGIRequest):
 def quick_login(request: WSGIRequest):
     user_id = request.POST.get('user_id')
     user = User.objects.get(pk=user_id)
-    auth.login(request, user)
+    auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
     return redirect('home_page')
 
 

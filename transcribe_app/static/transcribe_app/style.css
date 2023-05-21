@@ -347,3 +347,14 @@ input:checked + .slider:before {
 .timecode-phrase{
     display: flex;
 }
+
+#errors a {
+    color: #F5F5F5;
+    text-decoration: none;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+.very_long {
+    width: 1280px;
+}
