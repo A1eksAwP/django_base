@@ -11,6 +11,8 @@
         <a href="{% url 'transcribe' %}">Котики</a>
         <a href="{% url 'todo' %}">ToDo</a>
         <a href="{% url 'snake' %}">Змейка</a>
+        <a href="{% url 'converter_view' %}">Конвертер</a>
+        <a href="{% url 'converter_api' %}">API</a>
         <a href="{% url 'logout' %}">Выйти</a>
         <a href="{% url 'edit' %}">{{ user.username }}</a>
     {% else %}

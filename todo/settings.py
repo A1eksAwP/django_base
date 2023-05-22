@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'transcribe_app',
     'cases_app',
     'snake_app',
+    'converter_app',
 ]
 
 SITE_ID = 2
@@ -83,7 +84,9 @@ TEMPLATES = [
             'todo_app/templates',
             'cases_app/templates',
             'snake_app/templates',
-            'homepage_app/templates'
+            'homepage_app/templates',
+            'transcribe_app/templates',
+            'converter_app/templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -147,6 +150,8 @@ STATIC_ROOT = 'dist/'
 STATICFILES_DIRS = [
     'auth_app/static/',
     'snake_app/static/',
+    'converter_app/static/',
+    'transcribe_app/static/',
 ]
 
 
