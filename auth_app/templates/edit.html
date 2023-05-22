@@ -1,5 +1,66 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    Редактирование профиля {{ user.username }}
+{% endblock %}
+
 {% block content %}
-    <p>EDIT</p>
+<div class="form-box">
+        <div class="form-value">
+            <form method="POST">
+                {% csrf_token %}
+                <h2>Изменить данные</h2>
+                <div class="inputbox">
+                    <ion-icon name="person-outline"></ion-icon>
+                    <input type="text" name="username" autocomplete="off" value="{{ user.username }}" required>
+                    <label for="username">Логин</label>
+                </div>
+                <div class="inputbox">
+                    <ion-icon name="pricetag-outline"></ion-icon>
+                    <input type="text" name="first_name" autocomplete="off" value="{{ user.first_name }}">
+                    <label for="first_name">Имя</label>
+                </div>
+                <div class="inputbox">
+                    <ion-icon name="people-outline"></ion-icon>
+                    <input type="text" name="last_name" autocomplete="off" value="{{ user.last_name }}">
+                    <label for="last_name">Фамилия</label>
+                </div>
+                <div class="inputbox">
+                    <ion-icon name="mail-outline"></ion-icon>
+                    <input type="email" name="email" value="{{ user.email }}" required>
+                    <label for="email">E-Mail</label>
+                </div>
+{#                <div class="inputbox">#}
+{#                    <ion-icon name="call-outline"></ion-icon>#}
+{#                    <input type="tel" name="phone" value="{{ user.phone }}">#}
+{#                    <label for="phone">Телефон</label>#}
+{#                </div>#}
+                <div class="buttons">
+                    <button type="submit">
+                        Применить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="errors">
+        {% if errors %}
+            {% for message in errors %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block other_scripts %}
+    <script>
+    // Чтобы запретить нажимать пробел где-либо
+    const spaceBlock = document.querySelector("body");
+
+    spaceBlock.addEventListener('keydown', (event) => {
+        if (event.code === 'Space') {
+        event.preventDefault();
+        }
+    });
+    </script>
 {% endblock %}

@@ -68,3 +68,41 @@ class RegisterValidator(Validator):
             "password": self.password,
             "password_confirm": self.password_confirm,
         })
+
+
+class EditValidator(RegisterValidator):
+    def __init__(self, request_data: dict, db_username: str):
+        self.request_data = request_data
+        self.username = self.request_data['username']
+        self.email = self.request_data['email']
+        # self.phone = self.request_data['phone']
+        self.first_name = self.request_data['first_name']
+        self.last_name = self.request_data['last_name']
+        self.password = ''
+        self.password_confirm = ''
+        self.errors = []
+        self.db_username = db_username
+        self.db_user = User.objects.filter(username=self.db_username).first()
+
+    def validate(self):
+        if self.db_user.username != self.username and User.objects.filter(username=self.username).exists():
+            self.errors.append(ERROR_MESSAGE.USER_ALREADY_EXIST)
+        if self.db_user.email != self.email and User.objects.filter(email=self.email).exists():
+            self.errors.append(ERROR_MESSAGE.EMAIL_ALREADY_EXIST)
+        if self.db_user.username != self.username and not self.validate_username() or len(self.username) < 6:
+            self.errors.append(ERROR_MESSAGE.BAD_USERNAME)
+        if self.db_user.email != self.email and not self.is_valid_email():
+            self.errors.append(ERROR_MESSAGE.BAD_EMAIL)
+        # if self.db_user.phone != self.phone and not self.validate_phone():
+        #     self.errors.append(ERROR_MESSAGE.BAD_PHONE)
+        if self.errors:
+            self.__throw()
+
+    def __throw(self):
+        raise ValidateException(self.errors, {
+            "username": self.username,
+            "email": self.email,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            # "phone": self.phone,
+        })

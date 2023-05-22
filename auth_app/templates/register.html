@@ -56,3 +56,16 @@
         {% endif %}
     </div>
 {% endblock %}
+
+{% block other_scripts %}
+    <script>
+    // Чтобы запретить нажимать пробел где-либо
+    const spaceBlock = document.querySelector("body");
+
+    spaceBlock.addEventListener('keydown', (event) => {
+        if (event.code === 'Space') {
+        event.preventDefault();
+        }
+    });
+    </script>
+{% endblock %}

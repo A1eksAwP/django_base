@@ -1,0 +1,65 @@
+
+{% load static %}
+
+<title>{% block title %}Валютный конвертер{% endblock %}</title>
+
+    {% block link %}
+        <link rel="stylesheet" type="text/css" href="{% static 'converter_app/converter_style.css' %}">
+    {% endblock %}
+
+{% block content %}
+    <form action="{% url 'convert_view' %}" method="POST">
+        {% csrf_token %}
+    <div class="container">
+    <div class="card-header">Конвертер валют</div>
+    <div class="card-body">Из:
+        <div class="unit-control">
+            <div class="unit">
+                <select name="from">
+                    {% for currency in all_currency %}
+                        {% if currency.id == response_from %}
+                    <option selected>{{ currency.id }}</option>
+                        {% else %}
+                    <option>{{ currency.id }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <span class="exchange-icon fa-fw fa-stack">
+        <i class="far fa-circle fa-stack-2x"></i>
+        <i class="fas fa-exchange-alt fa-stack-1x"></i>
+      </span>
+            <div class="unit">
+
+                <select name="to">
+                    {% for currency in all_currency %}
+                        {% if currency.id == response_to %}
+                    <option selected>{{ currency.id }}</option>
+                        {% else %}
+                    <option>{{ currency.id }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="converter">
+            <div class="flex-1">
+                <div class="converter-title">Кол-во</div>
+                <input type="number" name="count" class="input-number" min="0" value="{{ response_count }}" required/>
+            </div>
+            <span class="angle-icon fa-2x" style="margin-top: 30px">
+        <i class="fas fa-angle-right"></i>
+      </span>
+            <div class="text-right flex-1">
+                <div class="converter-title">Результат</div>
+                <input type="text" class="input-number text-right" value="{{ response_result }}" disabled/>
+            </div>
+        </div>
+    </div>
+
+        <button class="card-footer">
+            <span>Конвертировать</span>
+        </button>
+    </form>
+</div>
+{% endblock %}

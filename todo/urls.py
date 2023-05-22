@@ -10,5 +10,6 @@ urlpatterns = [
     path('cases/', include('cases_app.urls')),
     path('snake/', include('snake_app.urls')),
     path('accounts/', include('allauth.urls')),
+    path('converter/', include('converter_app.urls')),
     path('', home_page, name='home_page')
 ]
