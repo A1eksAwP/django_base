@@ -12,10 +12,7 @@
         <a href="{% url 'todo' %}">ToDo</a>
         <a href="{% url 'snake' %}">Змейка</a>
         <a href="{% url 'logout' %}">Выйти</a>
-        {% if user.first_name %}<a>{{ user.first_name }} {{ user.last_name }}</a>
-        {% else %}
-        <a>{{ user.username }}</a>
-        {% endif %}
+        <a href="{% url 'edit' %}">{{ user.username }}</a>
     {% else %}
         <a href="{% url 'register' %}">Регистрация</a>
         <a href="{% url 'login' %}">Войти</a>

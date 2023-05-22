@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.core.handlers.wsgi import WSGIRequest
 from django.contrib import auth
 from django.contrib.auth.models import User
-from auth_app.service.validator.validators import RegisterValidator
+from auth_app.service.validator.validators import RegisterValidator, EditValidator
 from auth_app.service.validator.exceptions.expection import ValidateException
 from auth_app.service.validator import ERROR_MESSAGE
 import json
@@ -73,6 +73,34 @@ def logout(request: WSGIRequest):
 
 
 def edit(request: WSGIRequest):
+    if request.method == 'POST':
+        request_data = request.POST.dict()
+        db_username = request.user.username
+        try:
+            EditValidator(request_data, db_username).validate()
+        except ValidateException as exception:
+            return render(request, 'edit.html', {
+                'errors': exception.errors_list,
+                'params': exception.params,
+            })
+        except BaseException:
+            return render(request, 'edit.html', {'errors': [ERROR_MESSAGE.UNKNOWN_ERROR]})
+
+        user: User = User.objects.filter(username=db_username).first()
+        user.username = request_data['username']
+        user.email = request_data['email']
+        user.first_name = request_data['first_name']
+        user.last_name = request_data['last_name']
+        # user.phone = request_data['phone']
+        try:
+            user.save()
+        except Exception as e:
+            return render(request, 'errors.html', {
+                'errors': [f'{ERROR_MESSAGE.USER_EDIT_FAIL.format(user.username)}', f'Ошибка сервера: {e}']
+            })
+        return render(request, 'info.html', {
+            'message': f'Данные о {user.username} успешно изменены в системе!',
+        })
     return render(request, 'edit.html')
 
 
